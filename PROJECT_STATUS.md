@@ -16,20 +16,22 @@ Phase 1 - Foundation
 
 ## Done and verified
 - Repository exists
-- PROJECT_STATUS.md created
-- README.md rewritten with project description, scientific limitation, and principles
-- NYC access-check workflow file added (verify-nyc-access.yml); not yet run or verified
-- NYC source identified (not yet accessed or validated)
+- PROJECT_STATUS.md and README.md written
+- NYC access check workflow (verify-nyc-access.yml) run successfully (run #5, HTTP 200)
+- NYC access verified: dataset reachable, last updated 2026-11-27 UTC, 48 columns including latitude, longitude, created_date, complaint_type, descriptor
+- NYC rodent category found: complaint_type = "Rodent"
+- NYC descriptors seen in discovery sample: Rat Sighting, Condition Attracting Rodents, Rodent Sighting, Signs of Rodents, Mouse Sighting. descriptor_2 includes "Rodent Infestation"
+- "Rodents/Insects/Garbage" descriptor appeared in text search under other complaint types; needs separate review before inclusion
 
 ## Next step
-- Run the NYC access check in the Actions tab (dataset erm2-nwe9)
-- Find the exact rodent-related complaint category names in the data
+- Project folder structure and documentation (Phase 1)
+- Then NYC ingestion (Phase 2): download real records with complaint_type = "Rodent", validate coordinates and dates
 
 ## City integration status
 
 | City | Status | Notes |
 |---|---|---|
-| New York City | Source identified | First city for Phase 2 |
+| New York City | Access verified | Rodent category identified. Ingestion not yet implemented. |
 | Chicago | Source identified | Third-party research lists mapped data; our access not verified |
 | Washington, DC | Source identified | Same as above |
 | Baltimore | Source identified | Same as above |
@@ -47,7 +49,8 @@ Third-party research source: github.com/parksiihu7/us-311-rat-map (statuses only
 - URL: https://data.cityofnewyork.us/d/erm2-nwe9
 - Older data (2010-2019): dataset 76ig-c548
 - Dec 2025: dataset was split and some column labels changed; each dataset will keep only 10 years of data
-- Not yet verified: access, freshness, rodent category names, coordinate completeness
+- Discovery sample numbers are not statistics and must not be displayed
+- Not yet verified: full coordinate completeness, duplicates, historical coverage
 
 ## Decisions
 - Free tools first; warn before anything that could cost money
