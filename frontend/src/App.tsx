@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import RatMap from "./RatMap";
+import MonthChart from "./MonthChart";
 
 type Summary = {
   meta: any;
@@ -25,6 +26,16 @@ export default function App() {
     return data.cells
       .map((c) => [c[0], c[1], i < 0 ? c[2] : c[3][i]] as [number, number, number])
       .filter((p) => p[2] > 0);
+  }, [data, year]);
+
+  const months = useMemo(() => {
+    if (!data) return {};
+    if (year === "all") return data.months;
+    const out: Record<string, number> = {};
+    for (const k of Object.keys(data.months)) {
+      if (k.startsWith(String(year))) out[k] = data.months[k];
+    }
+    return out;
   }, [data, year]);
 
   const total = points.reduce((s, p) => s + p[2], 0);
@@ -55,6 +66,7 @@ export default function App() {
           </select>
           <p style={{ margin: "4px 0" }}>Requests with coordinates shown: {total.toLocaleString()}</p>
           <RatMap points={points} />
+          <MonthChart months={months} />
           <p style={{ fontSize: 12, color: "#999" }}>
             Source:{" "}
             <a style={{ color: "#ff8a4c" }} href={data.meta.source_url}>
