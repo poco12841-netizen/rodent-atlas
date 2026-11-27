@@ -1,0 +1,64 @@
+{
+  "source": "NYC Open Data erm2-nwe9, complaint_type = Rodent",
+  "retrieved_at_utc": "2026-11-27T20:14:33.707535Z",
+  "total_records": 245808,
+  "duplicate_unique_keys": 0,
+  "missing_coordinates": 1591,
+  "coordinates_outside_nyc_box": 0,
+  "missing_created_date": 0,
+  "closed_before_created": 4,
+  "earliest_created": "2020-01-01T00:06:50.000",
+  "latest_created": "2026-11-26T00:05:56.000",
+  "by_descriptor": [
+    [
+      "Rat Sighting",
+      155325
+    ],
+    [
+      "Condition Attracting Rodents",
+      46005
+    ],
+    [
+      "Signs of Rodents",
+      26949
+    ],
+    [
+      "Mouse Sighting",
+      17473
+    ],
+    [
+      "Rodent Bite - PCS Only",
+      56
+    ]
+  ],
+  "by_borough": [
+    [
+      "BROOKLYN",
+      90409
+    ],
+    [
+      "MANHATTAN",
+      64325
+    ],
+    [
+      "QUEENS",
+      42508
+    ],
+    [
+      "BRONX",
+      39904
+    ],
+    [
+      "STATEN ISLAND",
+      8649
+    ],
+    [
+      "Unspecified",
+      11
+    ],
+    [
+      "(empty)",
+      2
+    ]
+  ]
+}
