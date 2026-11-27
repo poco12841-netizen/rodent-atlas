@@ -1,0 +1,90 @@
+name: NYC rodent validation report
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download NYC rodent records and validate
+        run: |
+          python - <<'PY'
+          import json, urllib.request, urllib.parse, os, datetime
+          from collections import Counter
+
+          BASE = "https://data.cityofnewyork.us/resource/erm2-nwe9.json"
+          FIELDS = ("unique_key,created_date,closed_date,complaint_type,"
+                    "descriptor,status,latitude,longitude,borough,incident_zip")
+          LIMIT = 50000
+          rows, offset = [], 0
+          while True:
+              q = urllib.parse.urlencode({
+                  "$select": FIELDS,
+                  "$where": "complaint_type='Rodent'",
+                  "$order": "unique_key",
+                  "$limit": LIMIT,
+                  "$offset": offset,
+              })
+              with urllib.request.urlopen(BASE + "?" + q, timeout=180) as r:
+                  page = json.load(r)
+              rows += page
+              if len(page) < LIMIT:
+                  break
+              offset += LIMIT
+
+          keys = [r.get("unique_key") for r in rows]
+          dup = len(keys) - len(set(keys))
+
+          def num(v):
+              try:
+                  return float(v)
+              except (TypeError, ValueError):
+                  return None
+
+          missing = outside = 0
+          for r in rows:
+              la, lo = num(r.get("latitude")), num(r.get("longitude"))
+              if la is None or lo is None:
+                  missing += 1
+              elif not (40.4 <= la <= 41.0 and -74.3 <= lo <= -73.6):
+                  outside += 1
+
+          created = sorted(r["created_date"] for r in rows if r.get("created_date"))
+          bad_order = sum(1 for r in rows
+                          if r.get("created_date") and r.get("closed_date")
+                          and r["closed_date"] < r["created_date"])
+
+          report = {
+              "source": "NYC Open Data erm2-nwe9, complaint_type = Rodent",
+              "retrieved_at_utc": datetime.datetime.utcnow().isoformat() + "Z",
+              "total_records": len(rows),
+              "duplicate_unique_keys": dup,
+              "missing_coordinates": missing,
+              "coordinates_outside_nyc_box": outside,
+              "missing_created_date": len(rows) - len(created),
+              "closed_before_created": bad_order,
+              "earliest_created": created[0] if created else None,
+              "latest_created": created[-1] if created else None,
+              "by_descriptor": Counter(r.get("descriptor") or "(empty)" for r in rows).most_common(),
+              "by_borough": Counter(r.get("borough") or "(empty)" for r in rows).most_common(),
+          }
+          os.makedirs("data/reports", exist_ok=True)
+          with open("data/reports/nyc_report.json", "w") as f:
+              json.dump(report, f, indent=2)
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Save report to repository
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data/reports/nyc_report.json
+          git diff --cached --quiet || git commit -m "Add NYC rodent validation report"
+          git push
