@@ -1,0 +1,32 @@
+name: Build frontend
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/build-frontend.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install tools
+        run: npm install
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build the site
+        run: npm run build
