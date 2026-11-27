@@ -1,0 +1,65 @@
+name: NYC summary for map
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build compact summary
+        run: |
+          python - <<'PY'
+          import json, urllib.request, urllib.parse, os, datetime
+          from collections import Counter, defaultdict
+
+          BASE = "https://data.cityofnewyork.us/resource/erm2-nwe9.json"
+          FIELDS = "unique_key,created_date,descriptor,latitude,longitude"
+          LIMIT = 50000
+          rows, offset = [], 0
+          while True:
+              q = urllib.parse.urlencode({
+                  "$select": FIELDS,
+                  "$where": "complaint_type='Rodent'",
+                  "$order": "unique_key",
+                  "$limit": LIMIT,
+                  "$offset": offset,
+              })
+              with urllib.request.urlopen(BASE + "?" + q, timeout=180) as r:
+                  page = json.load(r)
+              rows += page
+              if len(page) < LIMIT:
+                  break
+              offset += LIMIT
+
+          STEP = 0.005
+          years = list(range(2020, 2027))
+          months = Counter()
+          cells = defaultdict(lambda: [0] * len(years))
+          no_coords = 0
+          for r in rows:
+              d = (r.get("created_date") or "")[:7]
+              if d:
+                  months[d] += 1
+              try:
+                  la, lo = float(r["latitude"]), float(r["longitude"])
+              except (KeyError, TypeError, ValueError):
+                  no_coords += 1
+                  continue
+              y = int(d[:4]) if d else None
+              if y in years:
+                  key = (round(la // STEP * STEP + STEP / 2, 4),
+                         round(lo // STEP * STEP + STEP / 2, 4))
+                  cells[key][years.index(y)] += 1
+
+          out = {
+              "meta": {
+                  "city": "New York City",
+                  "sourc
