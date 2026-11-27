@@ -1,31 +1,42 @@
-# RODENT ATLAS
+# RODENT ATLAS - Project Status
 
-**A National Urban Rodent Intelligence Platform**
+Last updated: 2026-11-27
 
-*Don't just map the rats. Decode the city.*
+## Mission
+Open-source platform for official urban rodent-related 311 service requests across major US cities.
+Rule: 311 complaints are NOT a measure of actual rat populations.
 
-## What is this project?
+## Owner constraints
+- Complete beginner, no programming experience
+- Works only from a phone (no computer)
+- Prefers free tools
+- Limited free AI credit: owner confirms steps by writing "done" (no screenshots needed)
 
-RODENT ATLAS is an open-source project that aims to collect, standardize, analyze, and visualize official rodent-related 311 service requests from major US cities.
+## Current phase
+Phase 1 - Foundation
 
-## Project status
+## Done and verified
+- Repository exists
+- PROJECT_STATUS.md created
+- README.md rewritten with project description, scientific limitation, and principles
 
-Early development (Phase 1: Foundation). No city has been integrated yet, and no data is shown. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current state.
+## Next step
+- Research New York City 311 open data source (first city candidate)
 
-## Important scientific limitation
+## City integration status
+| City | Status |
+|------|--------|
+| New York City | Not researched |
+| Chicago | Not researched |
+| Los Angeles | Not researched |
+| San Francisco | Not researched |
+| Boston | Not researched |
+| Philadelphia | Not researched |
+| Washington, DC | Not researched |
+| Seattle | Not researched |
+| Baltimore | Not researched |
+| Portland | Not researched |
 
-311 complaints are NOT a direct measurement of actual rat populations.
-
-Complaint counts are influenced by population density, awareness of 311, access to reporting channels, local reporting habits, city response policies, and changes in how cities classify reports. This project will never present complaint counts as rat counts or population estimates.
-
-## Principles
-
-- Only real data from official public sources
-- No fabricated records, coordinates, or statistics
-- Every city has a transparent integration status
-- Every displayed record should be traceable to its source
-- Methods and limitations are documented openly
-
-## Target cities
-
-New York City, Chicago, Los Angeles, San Francisco, Boston, Philadelphia, Washington DC, Seattle, Baltimore, Portland. A city is only called "integrated" after its real data source is verified.
+## Decisions
+- Phone-only workflow: edit files on github.com, run data jobs with GitHub Actions, publish with Cloudflare Pages
+- Start without a database: scheduled jobs produce data files the site reads. Database may be added later.
