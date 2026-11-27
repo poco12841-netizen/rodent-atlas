@@ -10,20 +10,25 @@ Rule: 311 complaints are NOT a measure of actual rat populations.
 - Complete beginner, no programming experience
 - Works only from a phone (no computer)
 - Prefers free tools
+- Limited free AI credit: owner confirms steps by writing "done" (no screenshots needed)
 
 ## Current phase
-Phase 1 - Foundation (just started)
+Phase 1 - Foundation
 
 ## Done and verified
-- Repository exists and contains README.md (2 lines)
+- Repository exists
+- PROJECT_STATUS.md created
+- README.md rewritten with project description, scientific limitation, and principles
+- NYC source identified (not yet accessed or validated)
 
 ## Next step
-- Add this status file
+- Verify access to NYC dataset erm2-nwe9 (via GitHub Actions, since no computer)
+- Find the exact rodent-related complaint category names in the data
 
 ## City integration status
 | City | Status |
 |------|--------|
-| New York City | Not researched |
+| New York City | Source identified |
 | Chicago | Not researched |
 | Los Angeles | Not researched |
 | San Francisco | Not researched |
@@ -33,6 +38,13 @@ Phase 1 - Foundation (just started)
 | Seattle | Not researched |
 | Baltimore | Not researched |
 | Portland | Not researched |
+
+## NYC source notes
+- Dataset: 311 Service Requests from 2020 to Present, id erm2-nwe9
+- URL: https://data.cityofnewyork.us/d/erm2-nwe9
+- Older data (2010-2019): dataset 76ig-c548
+- Dec 2025: dataset was split and some column labels changed; each dataset will keep only 10 years of data
+- Not yet verified: access, freshness, rodent category names, coordinate completeness
 
 ## Decisions
 - Phone-only workflow: edit files on github.com, run data jobs with GitHub Actions, publish with Cloudflare Pages
