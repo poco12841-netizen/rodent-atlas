@@ -3,8 +3,7 @@
 Last updated: 2026-11-27
 
 ## Mission
-Open-source platform for official urban rodent-related 311 service requests across major US cities.
-Rule: 311 complaints are NOT a measure of actual rat populations.
+Open-source platform for official urban rodent-related 311 service requests across major US cities. Rule: 311 complaints are NOT a measure of actual rat populations.
 
 ## Owner constraints
 - Complete beginner, no programming experience
@@ -19,25 +18,29 @@ Phase 1 - Foundation
 - Repository exists
 - PROJECT_STATUS.md created
 - README.md rewritten with project description, scientific limitation, and principles
+- NYC access-check workflow file added (verify-nyc-access.yml); not yet run or verified
 - NYC source identified (not yet accessed or validated)
 
 ## Next step
-- Verify access to NYC dataset erm2-nwe9 (via GitHub Actions, since no computer)
+- Run the NYC access check in the Actions tab (dataset erm2-nwe9)
 - Find the exact rodent-related complaint category names in the data
 
 ## City integration status
-| City | Status |
-|------|--------|
-| New York City | Source identified |
-| Chicago | Not researched |
-| Los Angeles | Not researched |
-| San Francisco | Not researched |
-| Boston | Not researched |
-| Philadelphia | Not researched |
-| Washington, DC | Not researched |
-| Seattle | Not researched |
-| Baltimore | Not researched |
-| Portland | Not researched |
+
+| City | Status | Notes |
+|---|---|---|
+| New York City | Source identified | First city for Phase 2 |
+| Chicago | Source identified | Third-party research lists mapped data; our access not verified |
+| Washington, DC | Source identified | Same as above |
+| Baltimore | Source identified | Same as above |
+| Boston | Source identified | Same as above |
+| San Francisco | Source identified | Low volume reported by third-party research; to be checked |
+| Seattle | Source identified, no rodent category found | Third-party finding; needs our own check |
+| Los Angeles | Source identified, no rodent category found | Third-party finding; needs our own check |
+| Philadelphia | Source identified, no rodent category found | Third-party finding; needs our own check |
+| Portland | Not researched | Not verified in third-party research |
+
+Third-party research source: github.com/parksiihu7/us-311-rat-map (statuses only; no numbers are shown until we validate our own data).
 
 ## NYC source notes
 - Dataset: 311 Service Requests from 2020 to Present, id erm2-nwe9
@@ -47,5 +50,7 @@ Phase 1 - Foundation
 - Not yet verified: access, freshness, rodent category names, coordinate completeness
 
 ## Decisions
-- Phone-only workflow: edit files on github.com, run data jobs with GitHub Actions, publish with Cloudflare Pages
-- Start without a database: scheduled jobs produce data files the site reads. Database may be added later.
+- Free tools first; warn before anything that could cost money
+- Verification runs through GitHub Actions because the owner has no computer
+- NYC is the first city to integrate (Phase 2)
+- No city is called "Integrated" until we access and validate its source ourselves
