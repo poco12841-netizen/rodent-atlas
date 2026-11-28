@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-28T14:21:38+00:00",
+  "run_at": "2026-11-28T14:56:46+00:00",
   "version": "fetch-v1",
   "cities": [
     {
@@ -17,13 +17,13 @@
     },
     {
       "city": "chicago",
-      "fetched": 392745,
+      "fetched": 392747,
       "no_coords": 405,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 392340,
+      "kept": 392342,
       "first_date": "2019-02-25T16:07:15",
-      "last_date": "2026-11-27T21:55:40",
+      "last_date": "2026-11-28T08:14:22",
       "sources": [
         "data.cityofchicago.org/v6vf-nfxy"
       ]
@@ -94,6 +94,36 @@
       ]
     },
     {
+      "city": "kansas-city",
+      "fetched": 3395,
+      "no_coords": 1,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 3394,
+      "first_date": "2021-03-04T09:28:00",
+      "last_date": "2026-11-20T19:29:00",
+      "sources": [
+        "data.kcmo.org/d4px-6rwg"
+      ]
+    },
+    {
+      "city": "boston",
+      "fetched": 20360,
+      "no_coords": 23,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 20337,
+      "first_date": "2023-01-01 08:25:00",
+      "last_date": "2026-11-27T10:48:40",
+      "sources": [
+        "data.boston.gov/1a0b420d-99f1-4887-9851-990b2a5a6e17",
+        "data.boston.gov/254adca6-64ab-4c5c-9fc0-a6da622be185",
+        "data.boston.gov/9d7c2214-4709-478a-a2e8-fb2020a5bb94",
+        "data.boston.gov/dff4d804-5031-443a-8409-8344efd0e5c8",
+        "data.boston.gov/e6013a93-1321-4f2a-bf91-8d8a02f1e62f"
+      ]
+    },
+    {
       "city": "detroit",
       "fetched": 27180,
       "no_coords": 0,
@@ -108,13 +138,13 @@
     },
     {
       "city": "washington-dc",
-      "fetched": 71231,
+      "fetched": 71232,
       "no_coords": 0,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 71231,
+      "kept": 71232,
       "first_date": "2023-01-01T06:45:04",
-      "last_date": "2026-11-28T14:07:44",
+      "last_date": "2026-11-28T14:13:43",
       "sources": [
         "maps2.dcgis.dc.gov ServiceRequests layer 15",
         "maps2.dcgis.dc.gov ServiceRequests layer 16",
