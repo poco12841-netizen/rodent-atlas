@@ -1,80 +1,12 @@
 name: Verify NYC 311 access
-
 on:
   workflow_dispatch:
-
 jobs:
-  verify:
+  probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Check NYC 311 dataset access
-        run: |
-          python3 - <<'PY'
-          import json, os, re, sys, urllib.parse, urllib.request
-          from collections import Counter
-          from datetime import datetime, timezone
-
-          BASE = "https://data.cityofnewyork.us"
-          DATASET = "erm2-nwe9"
-          lines = []
-
-          def out(text=""):
-              print(text)
-              lines.append(text)
-
-          def get(url):
-              req = urllib.request.Request(url, headers={"User-Agent": "rodent-atlas-check/0.1"})
-              with urllib.request.urlopen(req, timeout=90) as resp:
-                  return resp.status, json.loads(resp.read().decode("utf-8"))
-
-          pattern = re.compile(r"\b(rat|rats|rodent|rodents|mouse|mice)\b", re.I)
-          failed = False
-
-          try:
-              out("# NYC 311 access check")
-              out("")
-              status, meta = get(BASE + "/api/views/" + DATASET + ".json")
-              cols = [c.get("fieldName") for c in meta.get("columns", []) if c.get("fieldName")]
-              out("- Metadata request: HTTP " + str(status))
-              out("- Dataset name: " + str(meta.get("name")))
-              updated = meta.get("rowsUpdatedAt")
-              if updated:
-                  out("- Rows last updated (UTC): " + datetime.fromtimestamp(updated, timezone.utc).isoformat())
-              else:
-                  out("- Rows last updated: not reported")
-              out("- Columns (" + str(len(cols)) + "): " + ", ".join(cols))
-              geo_cols = [c for c in cols if "latitude" in c.lower() or "longitude" in c.lower()]
-              for term in ("rodent", "rat"):
-                  out("")
-                  out("## Text search: " + term)
-                  query = urllib.parse.urlencode({"$q": term, "$limit": "1000"})
-                  status, rows = get(BASE + "/resource/" + DATASET + ".json?" + query)
-                  out("- Data request: HTTP " + str(status) + ", rows returned: " + str(len(rows)))
-                  if not rows:
-                      continue
-                  for c in geo_cols:
-                      have = sum(1 for r in rows if r.get(c) not in (None, ""))
-                      out("- Rows with " + c + ": " + str(have) + " of " + str(len(rows)))
-                  found = {}
-                  for r in rows:
-                      for k, v in r.items():
-                          if isinstance(v, str) and len(v) <= 80 and pattern.search(v):
-                              found.setdefault(k, Counter())[v] += 1
-                  for k, counter in found.items():
-                      out("- Column `" + k + "`:")
-                      for v, n in counter.most_common(15):
-                          out("  - " + v + " (" + str(n) + " in sample)")
-              out("")
-              out("Note: this is a text-search sample for discovery only. Do not use these numbers as statistics.")
-          except Exception as e:
-              failed = True
-              out("")
-              out("FAILED: " + repr(e))
-          finally:
-              path = os.environ.get("GITHUB_STEP_SUMMARY")
-              if path:
-                  with open(path, "a", encoding="utf-8") as f:
-                      f.write("\n".join(lines) + "\n")
-          if failed:
-              sys.exit(1)
-          PY
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/chicago_probe.py
