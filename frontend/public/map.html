@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RODENT ATLAS · National Map</title>
+<meta name="description" content="Interactive map of official rodent-related 311 reports from US cities.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="map.css">
+</head>
+<body>
+<header>
+  <div class="brand"><b>RODENT</b> ATLAS <span>Don't just map the rats. Decode the city.</span></div>
+  <button id="toggle" type="button">Filters</button>
+</header>
+<div id="map"></div>
+<section id="panel">
+  <div id="status" class="note">Loading data...</div>
+  <h3>Cities</h3>
+  <div id="cities" class="chips"></div>
+  <h3>Date range</h3>
+  <div class="row"><input type="date" id="from"><input type="date" id="to"></div>
+  <h3>Complaint category (city's original label)</h3>
+  <select id="type"><option value="-1">All categories</option></select>
+  <div id="shown" class="big">-</div>
+  <canvas id="chart" width="360" height="90"></canvas>
+  <button id="csv" type="button" disabled>Download filtered CSV</button>
+  <h3>Data coverage</h3>
+  <div class="scroll"><table id="coverage"></table></div>
+  <div class="warn">311 complaints are NOT a count of rats. They reflect who reports, how easy reporting is, and how each city classifies requests. Cities record different kinds of events, so do not compare totals across cities as rat populations.</div>
+  <p class="links">
+    <a href="https://github.com/poco12841-netizen/rodent-atlas/blob/main/docs/DATA_SOURCES.md" target="_blank" rel="noopener">Sources and methods</a> ·
+    <a href="https://github.com/poco12841-netizen/rodent-atlas" target="_blank" rel="noopener">GitHub</a>
+  </p>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="loader.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
