@@ -33,7 +33,7 @@ function makeMap() {
     }
   });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-  map.on("load", () => {
+  map.once("style.load", () => {
     map.addSource("pts", {
       type: "geojson",
       data: pendingData || { type: "FeatureCollection", features: [] },
