@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import RatMap from "./RatMap";
 import MonthChart from "./MonthChart";
 import DataTrust from "./DataTrust";
+import Methodology from "./Methodology";
 
 type Summary = {
   meta: any;
@@ -69,6 +70,7 @@ export default function App() {
           <RatMap points={points} />
           <MonthChart months={months} />
           <DataTrust />
+          <Methodology />
           <p style={{ fontSize: 12, color: "#999" }}>
             Source:{" "}
             <a style={{ color: "#ff8a4c" }} href={data.meta.source_url}>
