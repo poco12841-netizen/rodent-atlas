@@ -4,11 +4,89 @@ const fmtN = n => Number(n).toLocaleString("en-US");
 const cities = [];
 const selected = new Set();
 let map = null, mapReady = false, pendingData = null, lastFilter = null;
+let lastErr = "", bound = false;
 
 function setStatus(msg, bad) {
   const el = $("status");
   el.textContent = msg;
   el.style.color = bad ? "#f87171" : "";
+}
+
+function bindEvents() {
+  map.on("click", "clusters", async e => {
+    const f = map.queryRenderedFeatures(e.point, { layers: ["clusters"] })[0];
+    if (!f) return;
+    const z = await map.getSource("pts").getClusterExpansionZoom(f.properties.cluster_id);
+    map.easeTo({ center: f.geometry.coordinates, zoom: z });
+  });
+  map.on("click", "point", e => {
+    const f = e.features[0];
+    const c = cities[f.properties.ci], k = f.properties.k;
+    const rec = document.createElement("div");
+    rec.className = "rec";
+    const t = c.t[k];
+    const rows = [
+      ["City", prettyName(c.id)],
+      ["Category", TYPES.list[c.typ[k]]],
+      ["Detail", DESCS.list[c.desc[k]]],
+      ["Status", STATUSES.list[c.st[k]]],
+      ["Date", t ? new Date(t * 1000).toISOString().slice(0, 10) : "n/a"],
+      ["Record", c.ids[k]]
+    ];
+    rows.forEach(r => {
+      if (!r[1]) return;
+      const line = document.createElement("div");
+      const lab = document.createElement("span");
+      lab.textContent = r[0] + ": ";
+      line.appendChild(lab);
+      line.appendChild(document.createTextNode(r[1]));
+      rec.appendChild(line);
+    });
+    new maplibregl.Popup({ closeButton: true }).setLngLat(f.geometry.coordinates).setDOMContent(rec).addTo(map);
+  });
+  ["clusters", "point"].forEach(l => {
+    map.on("mouseenter", l, () => { map.getCanvas().style.cursor = "pointer"; });
+    map.on("mouseleave", l, () => { map.getCanvas().style.cursor = ""; });
+  });
+}
+
+function addLayers(silent) {
+  if (mapReady) return;
+  try {
+    if (!map.getSource("pts")) {
+      map.addSource("pts", {
+        type: "geojson",
+        data: pendingData || { type: "FeatureCollection", features: [] },
+        cluster: true, clusterRadius: 45, clusterMaxZoom: 13
+      });
+    }
+    if (!map.getLayer("clusters")) {
+      map.addLayer({
+        id: "clusters", type: "circle", source: "pts", filter: ["has", "point_count"],
+        paint: {
+          "circle-color": ["step", ["get", "point_count"], "#fb923c", 100, "#ea580c", 1000, "#dc2626"],
+          "circle-radius": ["step", ["get", "point_count"], 14, 100, 19, 1000, 25],
+          "circle-opacity": 0.9,
+          "circle-stroke-width": 1, "circle-stroke-color": "#ffffff"
+        }
+      });
+    }
+    if (!map.getLayer("point")) {
+      map.addLayer({
+        id: "point", type: "circle", source: "pts", filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": "#fb923c", "circle-radius": 6, "circle-opacity": 0.95,
+          "circle-stroke-width": 1, "circle-stroke-color": "#ffffff"
+        }
+      });
+    }
+    if (!bound) { bindEvents(); bound = true; }
+    mapReady = true;
+    pendingData = null;
+  } catch (e) {
+    lastErr = "layers: " + e.message;
+    if (!silent) setStatus("Map layer error: " + e.message, true);
+  }
 }
 
 function makeMap() {
@@ -18,7 +96,6 @@ function makeMap() {
     zoom: 3.4,
     style: {
       version: 8,
-      glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
       sources: {
         base: {
           type: "raster",
@@ -33,79 +110,26 @@ function makeMap() {
     }
   });
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-  map.once("style.load", () => {
-    map.addSource("pts", {
-      type: "geojson",
-      data: pendingData || { type: "FeatureCollection", features: [] },
-      cluster: true, clusterRadius: 45, clusterMaxZoom: 13
-    });
-    map.addLayer({
-      id: "clusters", type: "circle", source: "pts", filter: ["has", "point_count"],
-      paint: {
-        "circle-color": ["step", ["get", "point_count"], "#fb923c", 100, "#ea580c", 1000, "#dc2626"],
-        "circle-radius": ["step", ["get", "point_count"], 14, 100, 19, 1000, 25],
-        "circle-opacity": 0.85
-      }
-    });
-    map.addLayer({
-      id: "cluster-count", type: "symbol", source: "pts", filter: ["has", "point_count"],
-      layout: {
-        "text-field": "{point_count_abbreviated}",
-        "text-font": ["Open Sans Regular"],
-        "text-size": 12
-      },
-      paint: { "text-color": "#ffffff" }
-    });
-    map.addLayer({
-      id: "point", type: "circle", source: "pts", filter: ["!", ["has", "point_count"]],
-      paint: {
-        "circle-color": "#fb923c", "circle-radius": 5, "circle-opacity": 0.9,
-        "circle-stroke-width": 1, "circle-stroke-color": "#15171a"
-      }
-    });
-    map.on("click", "clusters", async e => {
-      const f = map.queryRenderedFeatures(e.point, { layers: ["clusters"] })[0];
-      if (!f) return;
-      const z = await map.getSource("pts").getClusterExpansionZoom(f.properties.cluster_id);
-      map.easeTo({ center: f.geometry.coordinates, zoom: z });
-    });
-    map.on("click", "point", e => {
-      const f = e.features[0];
-      const c = cities[f.properties.ci], k = f.properties.k;
-      const rec = document.createElement("div");
-      rec.className = "rec";
-      const t = c.t[k];
-      const rows = [
-        ["City", prettyName(c.id)],
-        ["Category", TYPES.list[c.typ[k]]],
-        ["Detail", DESCS.list[c.desc[k]]],
-        ["Status", STATUSES.list[c.st[k]]],
-        ["Date", t ? new Date(t * 1000).toISOString().slice(0, 10) : "n/a"],
-        ["Record", c.ids[k]]
-      ];
-      rows.forEach(r => {
-        if (!r[1]) return;
-        const line = document.createElement("div");
-        const lab = document.createElement("span");
-        lab.textContent = r[0] + ": ";
-        line.appendChild(lab);
-        line.appendChild(document.createTextNode(r[1]));
-        rec.appendChild(line);
-      });
-      new maplibregl.Popup({ closeButton: true }).setLngLat(f.geometry.coordinates).setDOMContent(rec).addTo(map);
-    });
-    ["clusters", "point"].forEach(l => {
-      map.on("mouseenter", l, () => { map.getCanvas().style.cursor = "pointer"; });
-      map.on("mouseleave", l, () => { map.getCanvas().style.cursor = ""; });
-    });
-    mapReady = true;
-    pendingData = null;
+  map.on("error", e => {
+    lastErr = String((e.error && e.error.message) || e.message || "unknown").slice(0, 80);
   });
+  map.once("style.load", () => addLayers(false));
+  map.on("load", () => addLayers(false));
 }
 
 function pushData(fc) {
+  pendingData = fc;
+  if (!mapReady) addLayers(true);
   if (mapReady) map.getSource("pts").setData(fc);
-  else pendingData = fc;
+  setTimeout(() => {
+    try {
+      const drawn = mapReady ? map.queryRenderedFeatures({ layers: ["point", "clusters"] }).length : 0;
+      setStatus("Debug: ready=" + mapReady + ", points=" + fc.features.length +
+        ", drawn=" + drawn + ", zoom=" + map.getZoom().toFixed(1) + ", err=" + (lastErr || "none"));
+    } catch (e) {
+      setStatus("Debug error: " + e.message, true);
+    }
+  }, 5000);
 }
 
 function median(arr) {
