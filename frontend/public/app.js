@@ -23,15 +23,14 @@
         sources: {
           base: {
             type: "raster",
-            tiles: [
-              "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-              "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-            ],
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
             tileSize: 256,
-            attribution: "© OpenStreetMap contributors © CARTO"
+            maxzoom: 19,
+            attribution: "© OpenStreetMap contributors"
           }
         },
-        layers: [{ id: "base", type: "raster", source: "base" }]
+        layers: [{ id: "base", type: "raster", source: "base",
+          paint: { "raster-brightness-max": 0.45, "raster-saturation": -0.7, "raster-contrast": 0.1 } }]
       }
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
@@ -369,5 +368,4 @@
     toggleCity(smallest, smallest.chip);
   }
 
-  init();
-})();
+  in
