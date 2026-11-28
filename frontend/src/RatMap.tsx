@@ -27,6 +27,7 @@ export default function RatMap({ points }: { points: P[] }) {
       style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
       center: [-73.95, 40.72],
       zoom: 9.5,
+      cooperativeGestures: true,
     });
     m.on("load", () => {
       m.addSource("pts", { type: "geojson", data: toGeo(latest.current) });
@@ -55,4 +56,4 @@ export default function RatMap({ points }: { points: P[] }) {
   }, [points]);
 
   return <div ref={box} style={{ width: "100%", height: "65vh", borderRadius: 12 }} />;
-          }
+}
