@@ -3,6 +3,19 @@ from socrata import socrata
 from other_sources import detroit, dc, baltimore, pittsburgh
 
 
+def prince_georges():
+    domain, ds = "data.princegeorgescountymd.gov", "y8p6-7ur2"
+    meta = get(f"https://{domain}/api/views/{ds}.json")
+    names = [x["fieldName"] for x in meta["columns"]
+             if not x["fieldName"].startswith(":")]
+    col = pick(names, [r"^service_name$", r"^request_type$", r"type_name", r"^type$"])
+    print("   type column:", col, "| all columns:", names)
+    if not col:
+        raise Exception("no type column found")
+    where = f"{col} in ('Rodents','Infestation of Bugs and/or Rodents')"
+    return socrata("prince-georges-county", domain, ds, where, col)
+
+
 def boston():
     # Boston 311 is published on CKAN as one table per year, plus a new
     # system that started in Nov 2026 with different column names.
@@ -67,6 +80,7 @@ TASKS = [
     ("washington-dc", dc),
     ("baltimore", baltimore),
     ("pittsburgh", pittsburgh),
+    ("prince-georges-county", prince_georges),
 ]
 
 summary = []
