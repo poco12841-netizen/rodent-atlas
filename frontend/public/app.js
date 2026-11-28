@@ -121,15 +121,6 @@ function pushData(fc) {
   pendingData = fc;
   if (!mapReady) addLayers(true);
   if (mapReady) map.getSource("pts").setData(fc);
-  setTimeout(() => {
-    try {
-      const drawn = mapReady ? map.queryRenderedFeatures({ layers: ["point", "clusters"] }).length : 0;
-      setStatus("Debug: ready=" + mapReady + ", points=" + fc.features.length +
-        ", drawn=" + drawn + ", zoom=" + map.getZoom().toFixed(1) + ", err=" + (lastErr || "none"));
-    } catch (e) {
-      setStatus("Debug error: " + e.message, true);
-    }
-  }, 5000);
 }
 
 function median(arr) {
