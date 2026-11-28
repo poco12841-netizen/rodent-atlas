@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-28T14:56:46+00:00",
+  "run_at": "2026-11-28T15:40:54+00:00",
   "version": "fetch-v1",
   "cities": [
     {
@@ -17,13 +17,13 @@
     },
     {
       "city": "chicago",
-      "fetched": 392747,
+      "fetched": 392748,
       "no_coords": 405,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 392342,
+      "kept": 392343,
       "first_date": "2019-02-25T16:07:15",
-      "last_date": "2026-11-28T08:14:22",
+      "last_date": "2026-11-28T08:49:44",
       "sources": [
         "data.cityofchicago.org/v6vf-nfxy"
       ]
@@ -138,13 +138,13 @@
     },
     {
       "city": "washington-dc",
-      "fetched": 71232,
+      "fetched": 71234,
       "no_coords": 0,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 71232,
+      "kept": 71234,
       "first_date": "2023-01-01T06:45:04",
-      "last_date": "2026-11-28T14:13:43",
+      "last_date": "2026-11-28T15:41:04",
       "sources": [
         "maps2.dcgis.dc.gov ServiceRequests layer 15",
         "maps2.dcgis.dc.gov ServiceRequests layer 16",
@@ -180,6 +180,19 @@
       "last_date": "2026-11-24T14:04:38",
       "sources": [
         "data.wprdc.org/5202679a-d243-402e-b82a-63189995a942"
+      ]
+    },
+    {
+      "city": "prince-georges-county",
+      "fetched": 1179,
+      "no_coords": 142,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 1037,
+      "first_date": "2012-08-31T15:39:00",
+      "last_date": "2016-08-13T14:23:00",
+      "sources": [
+        "data.princegeorgescountymd.gov/y8p6-7ur2"
       ]
     }
   ]
