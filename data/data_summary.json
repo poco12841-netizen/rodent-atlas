@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-28T11:05:43+00:00",
+  "run_at": "2026-11-28T14:21:38+00:00",
   "version": "fetch-v1",
   "cities": [
     {
@@ -95,18 +95,28 @@
     },
     {
       "city": "detroit",
-      "error": "{'code': 400, 'message': 'Cannot perform query. Invalid query parameters.', 'details': ['Unable to perform query. Please check your parameters.']}"
-    },
-    {
-      "city": "washington-dc",
-      "fetched": 53398,
+      "fetched": 27180,
       "no_coords": 0,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 53398,
-      "first_date": null,
-      "last_date": null,
+      "kept": 27180,
+      "first_date": "2017-06-14T19:17:31",
+      "last_date": "2026-11-27T14:14:17",
       "sources": [
+        "services2.arcgis.com improve_detroit layer 0"
+      ]
+    },
+    {
+      "city": "washington-dc",
+      "fetched": 71231,
+      "no_coords": 0,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 71231,
+      "first_date": "2023-01-01T06:45:04",
+      "last_date": "2026-11-28T14:07:44",
+      "sources": [
+        "maps2.dcgis.dc.gov ServiceRequests layer 15",
         "maps2.dcgis.dc.gov ServiceRequests layer 16",
         "maps2.dcgis.dc.gov ServiceRequests layer 18",
         "maps2.dcgis.dc.gov ServiceRequests layer 21"
@@ -114,15 +124,19 @@
     },
     {
       "city": "baltimore",
-      "fetched": 6019,
+      "fetched": 27431,
       "no_coords": 0,
       "bad_coords": 0,
       "duplicates": 0,
-      "kept": 6019,
-      "first_date": "2025-01-01T10:42:01",
-      "last_date": "2025-12-31T16:48:01",
+      "kept": 27431,
+      "first_date": "2023-01-01T12:21:34",
+      "last_date": "2026-11-28T03:09:28",
       "sources": [
-        "services1.arcgis.com 311_Customer_Service_Requests_2025 layer 0"
+        "services1.arcgis.com 311_Customer_Service_Requests yearly layers 2023-current",
+        "services1.arcgis.com 311_Customer_Service_Requests_2023 layer 0",
+        "services1.arcgis.com 311_Customer_Service_Requests_2024 layer 0",
+        "services1.arcgis.com 311_Customer_Service_Requests_2025 layer 0",
+        "services1.arcgis.com 311_Customer_Service_Requests_current layer 0"
       ]
     },
     {
