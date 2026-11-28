@@ -1,0 +1,142 @@
+{
+  "run_at": "2026-11-28T11:05:43+00:00",
+  "version": "fetch-v1",
+  "cities": [
+    {
+      "city": "new-york",
+      "fetched": 245839,
+      "no_coords": 1591,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 244248,
+      "first_date": "2020-01-01T00:06:50",
+      "last_date": "2026-11-26T23:40:37",
+      "sources": [
+        "data.cityofnewyork.us/erm2-nwe9"
+      ]
+    },
+    {
+      "city": "chicago",
+      "fetched": 392745,
+      "no_coords": 405,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 392340,
+      "first_date": "2019-02-25T16:07:15",
+      "last_date": "2026-11-27T21:55:40",
+      "sources": [
+        "data.cityofchicago.org/v6vf-nfxy"
+      ]
+    },
+    {
+      "city": "san-francisco",
+      "fetched": 3956,
+      "no_coords": 0,
+      "bad_coords": 1101,
+      "duplicates": 0,
+      "kept": 2855,
+      "first_date": "2010-01-26T12:51:31",
+      "last_date": "2024-02-28T15:12:51",
+      "sources": [
+        "data.sfgov.org/vw6y-z8j6"
+      ]
+    },
+    {
+      "city": "cincinnati",
+      "fetched": 8345,
+      "no_coords": 0,
+      "bad_coords": 0,
+      "duplicates": 10,
+      "kept": 8335,
+      "first_date": "2006-07-27T00:00:00",
+      "last_date": "2026-11-25T00:00:00",
+      "sources": [
+        "data.cincinnati-oh.gov/gcej-gmiw"
+      ]
+    },
+    {
+      "city": "cambridge",
+      "fetched": 4898,
+      "no_coords": 0,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 4898,
+      "first_date": "2016-01-07T10:40:47",
+      "last_date": "2026-11-27T18:15:11",
+      "sources": [
+        "data.cambridgema.gov/2z9k-mv9g"
+      ]
+    },
+    {
+      "city": "baton-rouge",
+      "fetched": 18345,
+      "no_coords": 20,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 18325,
+      "first_date": "2019-02-07T00:00:00",
+      "last_date": "2026-11-25T00:00:00",
+      "sources": [
+        "data.brla.gov/bktv-u9ua"
+      ]
+    },
+    {
+      "city": "new-orleans",
+      "fetched": 6520,
+      "no_coords": 0,
+      "bad_coords": 22,
+      "duplicates": 0,
+      "kept": 6498,
+      "first_date": "2019-01-01T21:33:05",
+      "last_date": "2026-11-23T12:47:59",
+      "sources": [
+        "data.nola.gov/2jgv-pqrq"
+      ]
+    },
+    {
+      "city": "detroit",
+      "error": "{'code': 400, 'message': 'Cannot perform query. Invalid query parameters.', 'details': ['Unable to perform query. Please check your parameters.']}"
+    },
+    {
+      "city": "washington-dc",
+      "fetched": 53398,
+      "no_coords": 0,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 53398,
+      "first_date": null,
+      "last_date": null,
+      "sources": [
+        "maps2.dcgis.dc.gov ServiceRequests layer 16",
+        "maps2.dcgis.dc.gov ServiceRequests layer 18",
+        "maps2.dcgis.dc.gov ServiceRequests layer 21"
+      ]
+    },
+    {
+      "city": "baltimore",
+      "fetched": 6019,
+      "no_coords": 0,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 6019,
+      "first_date": "2025-01-01T10:42:01",
+      "last_date": "2025-12-31T16:48:01",
+      "sources": [
+        "services1.arcgis.com 311_Customer_Service_Requests_2025 layer 0"
+      ]
+    },
+    {
+      "city": "pittsburgh",
+      "fetched": 8465,
+      "no_coords": 81,
+      "bad_coords": 0,
+      "duplicates": 0,
+      "kept": 8384,
+      "first_date": "2015-04-30T00:26:00",
+      "last_date": "2026-11-24T14:04:38",
+      "sources": [
+        "data.wprdc.org/5202679a-d243-402e-b82a-63189995a942"
+      ]
+    }
+  ]
+}
