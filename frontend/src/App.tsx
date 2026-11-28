@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import RatMap from "./RatMap";
 import MonthChart from "./MonthChart";
+import DataTrust from "./DataTrust";
 
 type Summary = {
   meta: any;
@@ -67,6 +68,7 @@ export default function App() {
           <p style={{ margin: "4px 0" }}>Requests with coordinates shown: {total.toLocaleString()}</p>
           <RatMap points={points} />
           <MonthChart months={months} />
+          <DataTrust />
           <p style={{ fontSize: 12, color: "#999" }}>
             Source:{" "}
             <a style={{ color: "#ff8a4c" }} href={data.meta.source_url}>
