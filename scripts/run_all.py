@@ -1,6 +1,6 @@
 from common import *
 from socrata import socrata
-from other_sources import detroit, dc, baltimore, pittsburgh
+from other_sources import arcgis, detroit, dc, baltimore, pittsburgh
 
 
 def prince_georges():
@@ -14,6 +14,32 @@ def prince_georges():
         raise Exception("no type column found")
     where = f"{col} in ('Rodents','Infestation of Bugs and/or Rodents')"
     return socrata("prince-georges-county", domain, ds, where, col)
+
+
+def evanston():
+    u = ("https://services3.arcgis.com/RVAJnWJd9M0xRdYG/arcgis/rest/services/"
+         "311_Service_Requests_(2013_to_2022)/FeatureServer/0")
+    c = Collector("evanston", "services3.arcgis.com 311_Service_Requests_(2013_to_2022)")
+    return arcgis(c, u, "Title IN ('Dead Rodent-Rat','Rodents- Rats')",
+                  "Title", "Date_Created")
+
+
+def hartford():
+    base = ("https://utility.arcgis.com/usrsvcs/servers/"
+            "fa056981accc4bb993ff2f85573bf7dd/rest/services/"
+            "Service_Requests_2015_to_Current/FeatureServer")
+    c = Collector("hartford", "Hartford Service_Requests_2015_to_Current")
+    meta = get(base, {"f": "json"})
+    items = (meta.get("layers") or []) + (meta.get("tables") or [])
+    print("   layers found:", [(x["id"], x["name"]) for x in items])
+    for x in items:
+        try:
+            c.source = f"Hartford Service Requests layer {x['id']} ({x['name']})"
+            arcgis(c, f"{base}/{x['id']}",
+                   "UPPER(USER_Record_Type) LIKE '%RODENT%'", "USER_Record_Type")
+        except Exception as e:
+            print(f"   WARNING: Hartford layer {x['id']} failed: {e}")
+    return c
 
 
 def boston():
@@ -81,6 +107,8 @@ TASKS = [
     ("baltimore", baltimore),
     ("pittsburgh", pittsburgh),
     ("prince-georges-county", prince_georges),
+    ("evanston", evanston),
+    ("hartford", hartford),
 ]
 
 summary = []
