@@ -1,14 +1,18 @@
 from common import *
 
-def arcgis(c, url, where, cat):
+def arcgis(c, url, where, cat, date_hint=None):
     meta = get(url, {"f": "json"})
     flds = {f["name"]: f["type"] for f in meta["fields"]}
     low = {n.lower(): n for n in flds}
     oid = meta.get("objectIdFieldName") or next(
         n for n, t in flds.items() if t == "esriFieldTypeOID")
     dates = [n for n, t in flds.items() if t == "esriFieldTypeDate"]
-    date_f = pick(dates, [r"creat", r"open", r"initi", r"add",
-                          r"request", r"date", r".*"])
+    # Use the date column we name explicitly when it exists in this layer.
+    # Only guess when no column was named (or the named one is missing).
+    date_f = low.get(date_hint.lower()) if date_hint else None
+    if date_f is None:
+        date_f = pick(dates, [r"creat", r"open", r"initi", r"add",
+                              r"request", r"date", r".*"])
     cat_f = low.get(cat.lower())
     st_f = pick(list(flds), [r"^status$", r"status"])
     lat_f = low.get("latitude") or low.get("lat")
@@ -43,22 +47,34 @@ def arcgis(c, url, where, cat):
 def detroit():
     u = "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/improve_detroit/FeatureServer/0"
     c = Collector("detroit", "services2.arcgis.com improve_detroit layer 0")
-    return arcgis(c, u, "request_type='Rodent Extermination'", "request_type")
+    return arcgis(c, u, "request_type='Rodent Extermination'", "request_type", "created_at")
 
 def baltimore():
-    u = "https://services1.arcgis.com/UWYHeuuJISiGmgXx/arcgis/rest/services/311_Customer_Service_Requests_2025/FeatureServer/0"
-    c = Collector("baltimore", "services1.arcgis.com 311_Customer_Service_Requests_2025 layer 0")
+    # Baltimore publishes one layer per year. "current" holds the newest year.
+    base = ("https://services1.arcgis.com/UWYHeuuJISiGmgXx/arcgis/rest/services/"
+            "311_Customer_Service_Requests_{}/FeatureServer/0")
+    c = Collector("baltimore", "services1.arcgis.com 311_Customer_Service_Requests yearly layers 2023-current")
     w = "SRType IN ('SW-Rat Rubout','SW-Rat Rubout Follow-up','HCD-Rodents')"
-    return arcgis(c, u, w, "SRType")
+    for y in ("2023", "2024", "2025", "current"):
+        try:
+            c.source = f"services1.arcgis.com 311_Customer_Service_Requests_{y} layer 0"
+            arcgis(c, base.format(y), w, "SRType", "CreatedDate")
+        except Exception as e:
+            print(f"   WARNING: Baltimore layer {y} failed: {e}")
+    return c
 
 def dc():
     c = Collector("washington-dc", "")
     w = ("SERVICECODEDESCRIPTION IN ('Rodent Inspection and Treatment',"
          "'DC Health Rodent & Vector Control')")
     base = "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/ServiceRequests/FeatureServer/"
-    for n in (21, 18, 16):
-        c.source = f"maps2.dcgis.dc.gov ServiceRequests layer {n}"
-        arcgis(c, base + str(n), w, "SERVICECODEDESCRIPTION")
+    # Layers: 15 = 2023, 16 = 2024, 18 = 2025, 21 = 2026
+    for n in (21, 18, 16, 15):
+        try:
+            c.source = f"maps2.dcgis.dc.gov ServiceRequests layer {n}"
+            arcgis(c, base + str(n), w, "SERVICECODEDESCRIPTION", "ADDDATE")
+        except Exception as e:
+            print(f"   WARNING: DC layer {n} failed: {e}")
     return c
 
 def pittsburgh():
